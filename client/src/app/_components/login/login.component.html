@@ -1,0 +1,56 @@
+<div class="container">
+  <div class="header">
+    <h1>To Do List</h1>
+    <div class="sign text-muted">
+      <small>by Danya</small>
+    </div>
+    <img src="../../../assets/Los_Pollos_Hermanos_logo.png" class="img-fluid">
+  </div>
+  <form [formGroup]="loginForm" autocomplete="off" (submit)="login()">
+    <div class="form-group">
+      <input type="text" class="form-control" [ngClass]="{'is-invalid': !isValid(loginForm.controls['username'])}"
+        name="username" id="username" placeholder="Username" formControlName="username">
+      <div class="invalid-feedback" *ngIf="loginForm.controls['username'].errors?.['required']">
+        Please enter your username
+      </div>
+    </div>
+    <div class="form-group">
+      <input type="password" class="form-control" [ngClass]="{'is-invalid': !isValid(loginForm.controls['password'])}"
+        name="password" id="password" placeholder="Password" formControlName="password">
+      <div class="invalid-feedback" *ngIf="loginForm.controls['password'].errors?.['required']">
+        Please enter your password
+      </div>
+    </div>
+    <button class="btn btn-primary" type="submit" [disabled]="!loginForm.valid">
+      Log In
+    </button>
+  </form>
+</div>
+
+<style>
+  .container {
+    border: 1px solid silver;
+    border-radius: 30px;
+    text-align: center;
+    width: 20vw;
+    padding: 1vw;
+    margin-top: 15vh;
+    min-width: 200px;
+    background-color: #f2f2f25e;
+  }
+
+  .form-group {
+    margin: 1vw 2vw;
+  }
+
+  .header {
+    line-height: 0;
+    text-align: center;
+  }
+
+  .sign {
+    text-align: right;
+    margin-right: 3vw;
+    font-size: small;
+  }
+</style>

@@ -4,6 +4,7 @@ using api.DTO;
 using api.Services;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 
 namespace api.Controllers
 {
@@ -48,6 +49,25 @@ namespace api.Controllers
       {
         UserName = user.UserName,
         Token = _tokenService.CreateToken(user)
+      };
+    }
+
+    [HttpPost("login")]
+    public async Task<ActionResult<UserDto>> Login(RegisterDto loginDto)
+    {
+      var user = await _userManager.Users.Include((x) => x.Lists)
+        .SingleOrDefaultAsync(x => x.UserName == loginDto.UserName);
+
+      if (user == null) return Unauthorized("Invalid username");
+      if (string.IsNullOrWhiteSpace(loginDto.Password)
+        && await _userManager.CheckPasswordAsync(user, loginDto.Password) == false)
+        return Unauthorized("Invalid password");
+
+      return new UserDto
+      {
+        UserName = user.UserName,
+        Token = _tokenService.CreateToken(user),
+        Lists = user.Lists,
       };
     }
   }
