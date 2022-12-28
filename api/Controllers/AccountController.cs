@@ -1,7 +1,9 @@
 using api.DAL;
 using api.Data;
 using api.DTO;
+using api.Extensions;
 using api.Services;
+using AutoMapper;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -14,15 +16,19 @@ namespace api.Controllers
     private readonly UserManager<AppUser> _userManager;
     private readonly ILogger<AccountController> _logger;
     private readonly TokenService _tokenService;
+    private readonly IMapper _mapper;
 
     public AccountController(
       UnitOfWork uow,
       UserManager<AppUser> userManager,
       ILogger<AccountController> logger,
-      TokenService tokenService)
+      TokenService tokenService,
+      IMapper mapper
+      )
     {
       _logger = logger;
       _tokenService = tokenService;
+      _mapper = mapper;
       _userManager = userManager;
       _uow = uow;
 
@@ -35,7 +41,7 @@ namespace api.Controllers
         UserName = registerDto.UserName
       };
 
-      var result = await _userManager.CreateAsync(user, registerDto.Password);
+      var result = await _userManager.CreateAppUser(_uow.ListRepository, user, registerDto.Password);
 
       if (!result.Succeeded)
       {
@@ -45,11 +51,9 @@ namespace api.Controllers
         return BadRequest("Error creating new user.");
       }
 
-      return new UserDto
-      {
-        UserName = user.UserName,
-        Token = _tokenService.CreateToken(user)
-      };
+      var dto = _mapper.Map<AppUser, UserDto>(user);
+      dto.Token = _tokenService.CreateToken(user);
+      return dto;
     }
 
     [HttpPost("login")]
@@ -62,13 +66,9 @@ namespace api.Controllers
       if (string.IsNullOrWhiteSpace(loginDto.Password)
         && await _userManager.CheckPasswordAsync(user, loginDto.Password) == false)
         return Unauthorized("Invalid password");
-
-      return new UserDto
-      {
-        UserName = user.UserName,
-        Token = _tokenService.CreateToken(user),
-        Lists = user.Lists,
-      };
+      var dto = _mapper.Map<AppUser, UserDto>(user);
+      dto.Token = _tokenService.CreateToken(user);
+      return dto;
     }
   }
 }

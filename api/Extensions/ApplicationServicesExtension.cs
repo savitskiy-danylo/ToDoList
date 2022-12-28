@@ -9,6 +9,7 @@ namespace api.Extensions
     {
       services.AddScoped<UnitOfWork, UnitOfWork>();
       services.AddScoped<TokenService, TokenService>();
+      services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
       return services;
     }
   }
