@@ -1,9 +1,11 @@
+using System.Diagnostics;
 using api.DAL;
 using api.Data;
 using api.DTO;
 using api.Extensions;
 using api.Services;
 using AutoMapper;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -59,8 +61,7 @@ namespace api.Controllers
     [HttpPost("login")]
     public async Task<ActionResult<UserDto>> Login(RegisterDto loginDto)
     {
-      var user = await _userManager.Users.Include((x) => x.Lists)
-        .SingleOrDefaultAsync(x => x.UserName == loginDto.UserName);
+      var user = await _userManager.Users.SingleOrDefaultAsync(x => x.UserName == loginDto.UserName);
 
       if (user == null) return Unauthorized("Invalid username");
       if (string.IsNullOrWhiteSpace(loginDto.Password)

@@ -1,0 +1,29 @@
+<div class="modal-header" style="justify-content: center;">
+  <h4 class="modal-title">Edit task: <strong>{{resultTask.title}}</strong></h4>
+</div>
+<div class="modal-body">
+  <form [formGroup]="editForm">
+    <div class="mb-3">
+      <label for="title" class="form-label">Title</label>
+      <input id="title" name="title" formControlName="title" [(ngModel)]="resultTask.title" type="text"
+        class="form-control">
+    </div>
+    <div class="mb-3">
+      <label for="description" class="form-label">Description</label>
+      <input id="description" name="description" formControlName="description" [(ngModel)]="resultTask.description"
+        type="text" class="form-control">
+    </div>
+    <div class="mb-3">
+      <label for="isCompleted" class="form-label">Is Completed?</label>
+      <select name="isCompleted" formControlName="isCompleted" [(ngModel)]="resultTask.isCompleted" id="isCompleted"
+        class="form-select">
+        <option value="true">Yes</option>
+        <option value="false">No</option>
+      </select>
+    </div>
+  </form>
+</div>
+<div class="modal-footer">
+  <button class="btn btn-success" (click)="save()">Save</button>
+  <button class="btn btn-danger" (click)="cancel()">Cancel</button>
+</div>

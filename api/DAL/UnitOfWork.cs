@@ -61,5 +61,10 @@ namespace api.DAL
       Dispose(true);
       GC.SuppressFinalize(this);
     }
+
+    public bool Save()
+    {
+      return _context.SaveChanges() > 0;
+    }
   }
 }

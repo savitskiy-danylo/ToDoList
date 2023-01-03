@@ -14,27 +14,31 @@ namespace api.Extensions
     {
       ToDoList list = new();
       list.Title = "Los Pollos Hermanos";
-      list.Discription = "Say my name.";
+      list.Description = "Say my name.";
       list.Tasks = new List<ToDoTask>{
         new(){
           Title = "Cook",
           Description = "Can it be more pure?",
           IsCompleted = true,
+          Index = 1
         },
         new(){
           Title = "Sell on cartels teritory",
           Description = "Who cares about Don Eladio?",
           IsCompleted = true,
+          Index = 2
         },
         new(){
           Title = "Make an offer to Don Eladio",
           Description = "Our chicken is the best.",
           IsCompleted = true,
+          Index = 3
         },
         new(){
           Title = "More cook",
           Description = "Will me and Gus be happy now?",
           IsCompleted = false,
+          Index = 4
         }
       };
       listRepository.Insert(list);

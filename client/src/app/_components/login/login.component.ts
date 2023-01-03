@@ -43,7 +43,7 @@ export class LoginComponent implements OnInit
   {
     if (this.loginForm.valid)
       this.accountService.login({
-        UserName: this.loginForm.controls['username'].value,
+        userName: this.loginForm.controls['username'].value,
         Password: this.loginForm.controls['password'].value
       }).subscribe({
         next: (response) =>
@@ -58,7 +58,7 @@ export class LoginComponent implements OnInit
             }
           })
           if (this.accountService.isLoggedIn() && user) {
-            this.toastr.success(`Welcome back ${user.UserName}!`);
+            this.toastr.success(`Welcome back ${user.userName}!`);
             this.router.navigateByUrl('');
           }
         }

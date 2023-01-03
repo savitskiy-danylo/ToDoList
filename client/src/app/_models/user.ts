@@ -1,6 +1,9 @@
+import { List } from "./list";
+
 export interface User
 {
-  UserName: string;
-  Token: string;
-  Lists: [];
+  id: string;
+  userName: string;
+  token: string;
+  lists: List[];
 }

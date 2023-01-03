@@ -17,7 +17,7 @@ export class AuthGuard implements CanActivate
   canActivate(): boolean | UrlTree
   {
     if (this.accountService.isLoggedIn()) {
-      return true
+      return true;
     } else {
       this.toastr.error("You need to log in.")
       return this.router.parseUrl('login')

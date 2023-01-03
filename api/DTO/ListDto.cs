@@ -4,7 +4,7 @@ namespace api.DTO
   {
     public string Id { get; set; }
     public string Title { get; set; }
-    public string Discription { get; set; }
+    public string Description { get; set; }
     public IEnumerable<TaskDto> Tasks { get; set; }
   }
 }

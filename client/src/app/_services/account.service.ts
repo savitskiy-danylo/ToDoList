@@ -1,4 +1,4 @@
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { ReplaySubject, map, take } from 'rxjs';
 import { environment } from 'src/environments/environment';
@@ -9,6 +9,7 @@ import { User } from '../_models/user';
 })
 export class AccountService
 {
+
   baseUrl = environment.apiUrl + 'account/';
   currentUserSource = new ReplaySubject<User>(1);
   currentUser$ = this.currentUserSource.asObservable();
@@ -56,5 +57,13 @@ export class AccountService
     });
 
     return (currentUser !== null) && (currentUser !== undefined);
+  }
+
+  restoreUser()
+  {
+    const storage = localStorage.getItem('user');
+    const storageUser: User = storage && JSON.parse(storage);
+
+    this.currentUserSource.next(storageUser);
   }
 }

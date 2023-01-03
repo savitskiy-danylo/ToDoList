@@ -8,5 +8,6 @@ namespace api.DTO
     public bool IsCompleted { get; set; } = false;
     public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
     public DateTime ExpiryDate { get; set; }
+    public int Index { get; set; }
   }
 }

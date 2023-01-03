@@ -1,1 +1,69 @@
-<p>home works!</p>
+<div class="wrapper">
+  <div class="card list-card bg-secondary" style="min-width: 350px; width: 25vw; --bs-bg-opacity: .5;"
+    *ngFor="let list of user?.lists">
+    <div class="card-body">
+      <h5 class="card-title">{{list.title}}</h5>
+      <p class="card-text">{{list.description}}</p>
+    </div>
+    <ul class="list-group list-group-flush">
+      <li class="list-group-item" style="display: flex; flex-wrap: wrap;" *ngFor="let task of list.tasks">
+        <div style="display: flex; align-content: space-between; flex-basis: 100%;">
+          <input [checked]="task.isCompleted" type="checkbox" name="{{task.title}}" id="{{task.id}}">
+          <button style="flex-grow: 1;" class="btn btn-link" (click)="changeState(task.id)"
+            [attr.arria-expanded]="!getCollapse(task.id)" aria-controls="collapseBasic" title="{{task.title}}">
+            {{task.title}}
+          </button>
+          <i class="fa fa-circle" style="align-self: center;" [ngStyle]="{'color': getStyles(task)}"></i>
+        </div>
+        <div id="collapseBasic" [collapse]="getCollapse(task.id)" style="flex-basis: 100%; margin-top: 0.5vh;">
+          <div class="border p-1">
+            <p style="margin: 0;">Description: </p>
+            <hr style="margin: 0;">
+            {{task.description}}
+            <div style="display:flex; justify-content: space-between; margin-top: 2em;">
+              <p style="margin: 0;">
+                {{task.expiryDate | date:'dd/mm/yy hh:mm'}}
+              </p>
+              <div style="display: flex; justify-self: flex-end;">
+                <button class="btn btn-link" style="padding: 0px;" (click)="showEditModal(task)"><i
+                    class="fa fa-edit"></i></button>
+                <button class="btn btn-link" style="padding: 0px; margin-left: 0.25em;" (click)="deleteTask(task)"><i
+                    class="fa fa-trash"></i></button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </li>
+      <div class="card-body" style="display: flex;">
+        <button class="btn btn-link"><i class="fa fa-pencil-square-o"></i></button>
+        <button class="btn btn-success" style="align-self: flex-end;">Save</button>
+      </div>
+    </ul>
+  </div>
+  <div class="list-card flex-item">
+    <i class="fa fa-plus-square-o add-new-list"></i>
+  </div>
+</div>
+<style>
+  .edit-button {
+    font-size: 1.25rem;
+    margin: 0;
+    margin-bottom: 0.5vh;
+    padding: 0;
+    opacity: 0.15;
+    transition: 0.3s;
+  }
+
+  .edit-button:hover {
+    opacity: 1;
+  }
+
+  .btn-link {
+    text-decoration: none;
+    color: black;
+  }
+
+  .card {
+    margin: 1em;
+  }
+</style>
