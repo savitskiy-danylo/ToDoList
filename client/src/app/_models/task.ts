@@ -7,4 +7,5 @@ export interface ToDoTask
   createdAt: Date;
   expiryDate: Date;
   index: number;
+  listId: string;
 }

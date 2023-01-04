@@ -6,4 +6,5 @@ export interface List
   title: string;
   description: string;
   tasks: ToDoTask[];
+  userId: string;
 }

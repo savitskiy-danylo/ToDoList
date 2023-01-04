@@ -12,18 +12,8 @@ export class ListService
   baseUrl = environment.apiUrl + "list/";
   constructor (private http: HttpClient) { }
 
-  updateTask(task: ToDoTask)
-  {
-    return this.http.put<List>(this.baseUrl, task);
-  }
-
   getLists()
   {
     return this.http.get<List[]>(this.baseUrl);
-  }
-
-  deleteTask(task: ToDoTask)
-  {
-    return this.http.delete(this.baseUrl + `delete-task/?id='${task.id}'`);
   }
 }

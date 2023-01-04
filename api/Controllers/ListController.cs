@@ -28,22 +28,6 @@ namespace api.Controllers
 
     }
 
-    [HttpPut]
-    public ActionResult UpdateTask(TaskDto editedTask)
-    {
-      var task = _uow.TaskRepository.Get(x => x.Id == editedTask.Id, null, "List").FirstOrDefault();
-      if (task == null) return BadRequest("Invalid request. Task does not exist");
-
-      var list = _uow.ListRepository.Get(x => x.Id == task.List.Id, null, "Tasks").FirstOrDefault();
-      if (list == null) return BadRequest("Invalid request. List does not exist");
-
-      _mapper.Map(editedTask, task);
-      _uow.TaskRepository.Update(task);
-      if (_uow.Save()) return NoContent();
-
-      return BadRequest("Error. No changes.");
-    }
-
     [HttpGet("{id}")]
     public async Task<ActionResult<ListDto>> GetList(string id)
     {
@@ -75,22 +59,6 @@ namespace api.Controllers
       return lists;
     }
 
-    [HttpDelete("delete-task/")]
-    public async Task<ActionResult> DeleteTask([FromQuery] DeleteParams deleteParams)
-    {
-      deleteParams.id = deleteParams.id.Replace('\'', ' ').Trim();
-      _logger.LogInformation($"!!!!!!!!!!!!!!!!! {deleteParams.id}");
-      var task = _uow.TaskRepository.Get(x => x.Id.Equals(deleteParams.id), null, "List").FirstOrDefault();
-      if (task == null) return BadRequest("Task does not exist.");
-      var user = await _userManager.Users.Include(x => x.Lists).FirstAsync(x => x.UserName == User.GetUsername());
-      var list = user.Lists.First(x => x.Id == task.List.Id);
-      if (list == null) return BadRequest("User don't have such a list.");
 
-      _uow.TaskRepository.Delete(task);
-
-      if (_uow.Save()) return NoContent();
-
-      return BadRequest("Cannot aply changes. [DELETE TASK]");
-    }
   }
 }

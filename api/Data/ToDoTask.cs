@@ -11,5 +11,6 @@ namespace api.Data
     public DateTime ExpiryDate { get; set; }
     public int Index { get; set; }
     public ToDoList List { get; set; }
+    public string ListId { get; set; }
   }
 }

@@ -1,14 +1,14 @@
 import { Component, OnInit } from '@angular/core';
-import { map, take } from 'rxjs';
+import { take } from 'rxjs';
 import { User } from 'src/app/_models/user';
 import { AccountService } from 'src/app/_services/account.service';
 import { ToDoTask } from 'src/app/_models/task';
-import { BsModalService } from 'ngx-bootstrap/modal';
-import { EditTaskComponent } from 'src/app/_component/edit-task/edit-task.component';
 import { ModalsService } from 'src/app/_services/modals.service';
 import { ToastrService } from 'ngx-toastr';
 import { ListService } from 'src/app/_services/list.service';
+import { TaskService } from 'src/app/_services/task.service';
 import { List } from 'src/app/_models/list';
+import { BsNavigationDirection } from 'ngx-bootstrap/datepicker/models';
 
 @Component({
   selector: 'app-home',
@@ -23,7 +23,8 @@ export class HomeComponent implements OnInit
     private accountService: AccountService,
     private modalService: ModalsService,
     private toastr: ToastrService,
-    private listService: ListService
+    private listService: ListService,
+    private taskService: TaskService
   ) { }
 
   ngOnInit(): void
@@ -33,8 +34,6 @@ export class HomeComponent implements OnInit
       {
         if (response) {
           this.user = response;
-          console.log(response);
-
         }
       }
     }
@@ -54,7 +53,10 @@ export class HomeComponent implements OnInit
           newLists.forEach(list =>
           {
             list.tasks.sort((a, b) => this.sortTasks(a, b))
-            list.tasks.forEach(task => this.collapseMap.set(task.id, true));
+            list.tasks.forEach(task =>
+            {
+              this.collapseMap.set(task.id, true);
+            });
           })
           this.user.lists = newLists;
         }
@@ -108,11 +110,39 @@ export class HomeComponent implements OnInit
 
   showEditModal(task: ToDoTask)
   {
-    this.modalService.editTask(task)?.subscribe({
+    this.modalService.modalTask(task)?.subscribe({
       next: (editedTask) =>
       {
-        if (editedTask)
-          this.listService.updateTask(editedTask).subscribe(
+        if (editedTask && !this.compareTasks(task, editedTask)) {
+          this.taskService.updateTask(editedTask).subscribe(
+            {
+              next: () =>
+              {
+                this.refreshLists();
+              }
+            }
+          );
+        }
+      }
+    });
+  }
+
+  showAddModal(list: List)
+  {
+    let task: ToDoTask = {} as ToDoTask;
+    task.title = "Title";
+    task.isCompleted = false;
+    task.listId = list.id;
+    task.description = "Who is W.W.?";
+    task.createdAt = new Date();
+    task.expiryDate = new Date();
+    task.expiryDate.setDate(task.createdAt.getDate() + 1);
+    task.index = list.tasks.length;
+    this.modalService.modalTask(task)?.subscribe({
+      next: (addedTask) =>
+      {
+        if (addedTask)
+          this.taskService.addTask(addedTask).subscribe(
             {
               next: () =>
               {
@@ -126,7 +156,7 @@ export class HomeComponent implements OnInit
 
   deleteTask(task: ToDoTask)
   {
-    this.listService.deleteTask(task).subscribe({
+    this.taskService.deleteTask(task).subscribe({
       next: () =>
       {
         this.refreshLists();
@@ -134,4 +164,19 @@ export class HomeComponent implements OnInit
     })
   }
 
+  compareTasks(a: ToDoTask, b: ToDoTask): boolean
+  {
+    if (new Date(a.expiryDate).getDate() !== new Date(b.expiryDate).getDate() || new Date(a.createdAt).getDate() !== new Date(b.createdAt).getDate()) {
+      return false
+    };
+
+    return a.description === b.description &&
+      a.id === b.id &&
+      a.index === b.index &&
+      a.isCompleted === b.isCompleted &&
+      a.listId === b.listId &&
+      a.title === b.title
+  }
 }
+
+

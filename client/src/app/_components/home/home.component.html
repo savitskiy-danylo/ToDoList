@@ -1,9 +1,12 @@
 <div class="wrapper">
   <div class="card list-card bg-secondary" style="min-width: 350px; width: 25vw; --bs-bg-opacity: .5;"
     *ngFor="let list of user?.lists">
-    <div class="card-body">
+    <div class="card-body" style="padding-bottom: 0; padding-right: 0;">
       <h5 class="card-title">{{list.title}}</h5>
       <p class="card-text">{{list.description}}</p>
+      <div style="display: flex; justify-content: flex-end; align-items: flex-end;">
+        <button class="btn btn-link p-0 pe-1" (click)="showAddModal(list)"><i class="fa fa-plus-square"></i></button>
+      </div>
     </div>
     <ul class="list-group list-group-flush">
       <li class="list-group-item" style="display: flex; flex-wrap: wrap;" *ngFor="let task of list.tasks">
@@ -22,7 +25,7 @@
             {{task.description}}
             <div style="display:flex; justify-content: space-between; margin-top: 2em;">
               <p style="margin: 0;">
-                {{task.expiryDate | date:'dd/mm/yy hh:mm'}}
+                {{task.expiryDate | date:'MM/dd/yy hh:mm a'}}
               </p>
               <div style="display: flex; justify-self: flex-end;">
                 <button class="btn btn-link" style="padding: 0px;" (click)="showEditModal(task)"><i
@@ -34,11 +37,11 @@
           </div>
         </div>
       </li>
-      <div class="card-body" style="display: flex;">
-        <button class="btn btn-link"><i class="fa fa-pencil-square-o"></i></button>
-        <button class="btn btn-success" style="align-self: flex-end;">Save</button>
-      </div>
     </ul>
+    <div class="card-body" style="display: flex;">
+      <button class="btn btn-link"><i class="fa fa-pencil-square-o"></i></button>
+      <button class="btn btn-success" style="align-self: flex-end;">Save</button>
+    </div>
   </div>
   <div class="list-card flex-item">
     <i class="fa fa-plus-square-o add-new-list"></i>

@@ -1,8 +1,7 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { AfterViewInit, Component, Input, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { BsModalRef } from 'ngx-bootstrap/modal';
 import { ToDoTask } from 'src/app/_models/task';
-import { ListService } from 'src/app/_services/list.service';
 
 @Component({
   selector: 'app-edit-task',
@@ -13,8 +12,8 @@ export class EditTaskComponent implements OnInit
 {
   inputTask: ToDoTask = {} as ToDoTask;
   resultTask: ToDoTask = {} as ToDoTask;
-  changed: boolean = false;
   editForm: FormGroup;
+  date: string = new Date().toDateString();
 
   constructor (
     private ref: BsModalRef,
@@ -27,6 +26,7 @@ export class EditTaskComponent implements OnInit
   ngOnInit(): void
   {
     this.resultTask = JSON.parse(JSON.stringify(this.inputTask));
+    this.resultTask.expiryDate = new Date(this.resultTask.expiryDate);
     this.editForm = this.formBuilder.group({
       title: this.resultTask.title,
       description: this.resultTask.description,
@@ -37,17 +37,11 @@ export class EditTaskComponent implements OnInit
 
   save()
   {
-    if (JSON.stringify(this.resultTask) === JSON.stringify(this.inputTask)) {
-      this.changed = false;
-    } else {
-      this.changed = true;
-    }
     this.ref.hide();
   }
 
   cancel()
   {
-    this.changed = false;
     this.resultTask = JSON.parse(JSON.stringify(this.inputTask));
     this.ref.hide();
   }

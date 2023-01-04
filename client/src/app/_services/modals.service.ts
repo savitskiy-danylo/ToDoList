@@ -12,7 +12,7 @@ export class ModalsService
   private editModalRef?: BsModalRef<EditTaskComponent>;
   constructor (private modalService: BsModalService) { }
 
-  editTask(task: ToDoTask)
+  modalTask(task: ToDoTask)
   {
     const config = {
       initialState: {
@@ -28,4 +28,5 @@ export class ModalsService
       })
     );
   }
+
 }
