@@ -1,8 +1,6 @@
-<!-- <div class="modal" tabindex="-1" role="dialog" style="display: flex;"> -->
-<!-- <div class="modal modal-dialog modal-lg" style="display: flex;"> -->
 <div class="modal-content" style="min-width: 570px;">
   <div class="modal-header" style="justify-content: center;">
-    <h4 id="modal-title" class="modal-title">Edit task: <strong>{{resultTask.title}}</strong></h4>
+    <h4 id="modal-title" class="modal-title">{{title}} <strong>{{resultTask.title}}</strong></h4>
   </div>
   <div class="modal-body">
     <form [formGroup]="editForm">
@@ -46,5 +44,3 @@
     <button class="btn btn-danger" (click)="cancel()">Cancel</button>
   </div>
 </div>
-<!-- </div> -->
-<!-- </div> -->

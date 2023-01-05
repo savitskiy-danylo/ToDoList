@@ -108,9 +108,9 @@ export class HomeComponent implements OnInit
     return "PENDING...";
   }
 
-  showEditModal(task: ToDoTask)
+  editTaskModal(task: ToDoTask)
   {
-    this.modalService.modalTask(task)?.subscribe({
+    this.modalService.modalTask(task, "Edit Task: ")?.subscribe({
       next: (editedTask) =>
       {
         if (editedTask && !this.compareTasks(task, editedTask)) {
@@ -127,7 +127,7 @@ export class HomeComponent implements OnInit
     });
   }
 
-  showAddModal(list: List)
+  addTaskModal(list: List)
   {
     let task: ToDoTask = {} as ToDoTask;
     task.title = "Title";
@@ -138,10 +138,10 @@ export class HomeComponent implements OnInit
     task.expiryDate = new Date();
     task.expiryDate.setDate(task.createdAt.getDate() + 1);
     task.index = list.tasks.length;
-    this.modalService.modalTask(task)?.subscribe({
+    this.modalService.modalTask(task, "New Task: ")?.subscribe({
       next: (addedTask) =>
       {
-        if (addedTask)
+        if (addedTask && !this.compareTasks(addedTask, task)) {
           this.taskService.addTask(addedTask).subscribe(
             {
               next: () =>
@@ -150,6 +150,7 @@ export class HomeComponent implements OnInit
               }
             }
           );
+        }
       }
     });
   }
@@ -164,9 +165,59 @@ export class HomeComponent implements OnInit
     })
   }
 
+  addListModal()
+  {
+    let list: List = {} as List;
+    list.title = "Title";
+    list.description = "Description";
+    list.userId = this.user.id;
+    this.modalService.modalList(list, "New List: ")?.subscribe({
+      next: (addedList) =>
+      {
+        if (addedList && !this.compareLists(addedList, list)) {
+          this.listService.addList(addedList).subscribe({
+            next: () =>
+            {
+              this.refreshLists();
+            }
+          })
+        }
+      }
+    })
+  }
+
+  editListModal(list: List)
+  {
+    this.modalService.modalList(list, "Edit Task: ")?.subscribe({
+      next: (editedList) =>
+      {
+        if (editedList && !this.compareLists(list, editedList)) {
+          this.listService.updateList(editedList).subscribe(
+            {
+              next: () =>
+              {
+                this.refreshLists();
+              }
+            }
+          );
+        }
+      }
+    });
+  }
+
+  deleteList(list: List)
+  {
+    this.listService.deleteList(list).subscribe({
+      next: () =>
+      {
+        this.refreshLists();
+      }
+    })
+  }
+
   compareTasks(a: ToDoTask, b: ToDoTask): boolean
   {
-    if (new Date(a.expiryDate).getDate() !== new Date(b.expiryDate).getDate() || new Date(a.createdAt).getDate() !== new Date(b.createdAt).getDate()) {
+    if (new Date(a.expiryDate).toUTCString() !== new Date(b.expiryDate).toUTCString() || new Date(a.createdAt).toUTCString() !== new Date(b.createdAt).toUTCString()) {
       return false
     };
 
@@ -176,6 +227,13 @@ export class HomeComponent implements OnInit
       a.isCompleted === b.isCompleted &&
       a.listId === b.listId &&
       a.title === b.title
+  }
+
+  compareLists(a: List, b: List): boolean
+  {
+    return a.title === b.title &&
+      a.description === b.description &&
+      a.userId === b.userId;
   }
 }
 

@@ -1,0 +1,27 @@
+<div class="modal-content" style="min-width: 570px;">
+  <div class="modal-header" style="justify-content: center;">
+    <h4 id="modal-title" class="modal-title">{{title}} <strong>{{resultList.title}}</strong></h4>
+  </div>
+  <div class="modal-body">
+    <form [formGroup]="editForm">
+      <div class="input-group mb-3">
+        <div class="input-group-prepend">
+          <span class="input-group-text" id="title">Title</span>
+        </div>
+        <input aria-describedby="title" name="title" formControlName="title" [(ngModel)]="resultList.title" type="text"
+          class="form-control">
+      </div>
+      <div class="input-group mb-3">
+        <div class="input-group-prepend d-flex">
+          <span class="input-group-text" id="description">Description</span>
+        </div>
+        <textarea formControlName="description" [(ngModel)]="resultList.description" type="text"
+          class="form-control"></textarea>
+      </div>
+    </form>
+  </div>
+  <div class="modal-footer">
+    <button class="btn btn-success" (click)="save()">Save</button>
+    <button class="btn btn-danger" (click)="cancel()">Cancel</button>
+  </div>
+</div>

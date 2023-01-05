@@ -14,6 +14,7 @@ export class EditTaskComponent implements OnInit
   resultTask: ToDoTask = {} as ToDoTask;
   editForm: FormGroup;
   date: string = new Date().toDateString();
+  title: string = "";
 
   constructor (
     private ref: BsModalRef,

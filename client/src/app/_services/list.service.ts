@@ -16,4 +16,19 @@ export class ListService
   {
     return this.http.get<List[]>(this.baseUrl);
   }
+
+  addList(list: List)
+  {
+    return this.http.put<List>(this.baseUrl + "add-list/", list);
+  }
+
+  deleteList(list: List)
+  {
+    return this.http.delete(this.baseUrl + `?id='${list.id}'`);
+  }
+
+  updateList(list: List)
+  {
+    return this.http.put<List>(this.baseUrl, list);
+  }
 }

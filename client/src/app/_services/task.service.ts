@@ -20,7 +20,7 @@ export class TaskService
 
   deleteTask(task: ToDoTask)
   {
-    return this.http.delete(this.baseUrl + `delete-task/?id='${task.id}'`);
+    return this.http.delete(this.baseUrl + `?id='${task.id}'`);
   }
 
   addTask(task: ToDoTask)

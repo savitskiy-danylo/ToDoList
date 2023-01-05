@@ -44,7 +44,7 @@ namespace api.Controllers
       return BadRequest("Error. No changes.");
     }
 
-    [HttpDelete("delete-task/")]
+    [HttpDelete]
     public async Task<ActionResult> DeleteTask([FromQuery] DeleteParams deleteParams)
     {
       deleteParams.id = deleteParams.id.Replace('\'', ' ').Trim();

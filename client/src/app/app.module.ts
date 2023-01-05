@@ -20,6 +20,8 @@ import { ModalModule } from 'ngx-bootstrap/modal';
 import { JwtInterceptor } from './_interceptors/jwt.interceptor';
 import { BsDatepickerModule } from 'ngx-bootstrap/datepicker';
 import { TimepickerModule } from 'ngx-bootstrap/timepicker';
+import { ListModalComponent } from './_components/list-modal/list-modal.component';
+import { BsDropdownModule } from 'ngx-bootstrap/dropdown';
 
 @NgModule({
   declarations: [
@@ -28,7 +30,8 @@ import { TimepickerModule } from 'ngx-bootstrap/timepicker';
     HomeComponent,
     LoginComponent,
     NavComponent,
-    EditTaskComponent
+    EditTaskComponent,
+    ListModalComponent
   ],
   imports: [
     CommonModule,
@@ -45,6 +48,7 @@ import { TimepickerModule } from 'ngx-bootstrap/timepicker';
     ModalModule.forRoot(),
     BsDatepickerModule.forRoot(),
     TimepickerModule.forRoot(),
+    BsDropdownModule.forRoot()
   ],
   providers: [
     { provide: HTTP_INTERCEPTORS, useClass: JwtInterceptor, multi: true }
